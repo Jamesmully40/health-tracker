@@ -29,9 +29,12 @@ const aiRoutes = require('./routes/ai');
 app.use('/api/auth', authRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api', apiRoutes);
-app.get('/', (req, res) => {
-    res.send('Health Tracker API is running');
-});
+
+if (process.env.NODE_ENV !== 'production') {
+    app.get('/', (req, res) => {
+        res.send('Health Tracker API is running');
+    });
+}
 
 // Serve static files in production
 if (process.env.NODE_ENV === 'production') {
