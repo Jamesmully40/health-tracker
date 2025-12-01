@@ -19,38 +19,39 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/health-tr
     useUnifiedTopology: true,
 })
     .then(() => console.log('MongoDB connected successfully'))
+    .then(() => console.log('MongoDB connected successfully'))
     .catch(err => {
         console.error('MongoDB connection error:', err);
-        console.error('MONGODB_URI used:', process.env.MONGODB_URI ? 'Defined' : 'Undefined');
-    });
+        const uri = process.env.MONGODB_URI;
+        if (uri) {
+            console.error('MONGODB_URI debug info:');
+            console.error('- Type:', typeof uri);
+            console.error('- Length:', uri.length);
+            console.error('- Starts with mongodb:// or mongodb+srv://:', uri.startsWith('mongodb://') || uri.startsWith('mongodb+srv://'));
+            console.error('- Contains spaces:', uri.includes(' '));
+            // Routes
+            app.use('/api/auth', authRoutes);
+            app.use('/api/ai', aiRoutes);
+            app.use('/api', apiRoutes);
 
-const apiRoutes = require('./routes/api');
-const authRoutes = require('./routes/auth');
-const aiRoutes = require('./routes/ai');
+            if (process.env.NODE_ENV !== 'production') {
+                app.get('/', (req, res) => {
+                    res.send('Health Tracker API is running');
+                });
+            }
 
-// Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/ai', aiRoutes);
-app.use('/api', apiRoutes);
+            // Serve static files in production
+            if (process.env.NODE_ENV === 'production') {
+                // Set static folder
+                app.use(express.static(path.join(__dirname, '../client/dist')));
 
-if (process.env.NODE_ENV !== 'production') {
-    app.get('/', (req, res) => {
-        res.send('Health Tracker API is running');
-    });
-}
+                // Any route not handled by the API will be handled by the React app
+                app.get('*', (req, res) => {
+                    res.sendFile(path.join(__dirname, '../client/dist', 'index.html'));
+                });
+            }
 
-// Serve static files in production
-if (process.env.NODE_ENV === 'production') {
-    // Set static folder
-    app.use(express.static(path.join(__dirname, '../client/dist')));
-
-    // Any route not handled by the API will be handled by the React app
-    app.get('*', (req, res) => {
-        res.sendFile(path.join(__dirname, '../client/dist', 'index.html'));
-    });
-}
-
-// Start Server
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+            // Start Server
+            app.listen(PORT, () => {
+                console.log(`Server is running on port ${PORT}`);
+            });
