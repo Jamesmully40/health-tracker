@@ -22,7 +22,7 @@ const LogForm = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            await axios.post('http://localhost:5000/api/logs', { ...formData, userId: user.id });
+            await axios.post('/api/logs', { ...formData, userId: user.id });
             navigate('/');
         } catch (error) {
             console.error('Error logging data:', error);

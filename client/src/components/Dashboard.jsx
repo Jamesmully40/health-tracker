@@ -22,7 +22,7 @@ const Dashboard = () => {
         const fetchLogs = async () => {
             if (!user) return;
             try {
-                const res = await axios.get(`http://localhost:5000/api/logs?userId=${user.id}`);
+                const res = await axios.get(`/api/logs?userId=${user.id}`);
                 setLogs(res.data);
             } catch (error) {
                 console.error('Error fetching logs:', error);

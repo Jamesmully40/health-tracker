@@ -10,7 +10,7 @@ const Recommendations = () => {
         const fetchRecommendations = async () => {
             if (!user) return;
             try {
-                const res = await axios.post('http://localhost:5000/api/ai/recommendations', { userId: user.id });
+                const res = await axios.get(`/api/ai/recommendations?userId=${user.id}`);
                 setRecommendations(res.data);
             } catch (error) {
                 console.error('Error fetching recommendations:', error);
@@ -38,8 +38,8 @@ const Recommendations = () => {
                         <div className="flex justify-between items-start mb-2">
                             <span className="text-xs font-bold uppercase tracking-wider text-indigo-500">{rec.category}</span>
                             <span className={`px-2 py-1 rounded text-xs font-medium ${rec.severity === 'high' ? 'bg-rose-100 text-rose-700' :
-                                    rec.severity === 'medium' ? 'bg-amber-100 text-amber-700' :
-                                        'bg-emerald-100 text-emerald-700'
+                                rec.severity === 'medium' ? 'bg-amber-100 text-amber-700' :
+                                    'bg-emerald-100 text-emerald-700'
                                 }`}>
                                 {rec.severity === 'high' ? 'Attention Needed' : rec.severity === 'medium' ? 'Moderate' : 'Good'}
                             </span>
