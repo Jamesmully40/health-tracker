@@ -21,19 +21,6 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/health-tr
     .then(() => console.log('MongoDB connected successfully'))
     .catch(err => {
         console.error('MongoDB connection error:', err);
-        const uri = process.env.MONGODB_URI;
-        if (uri) {
-            console.error('MONGODB_URI debug info:');
-            console.error('- Type:', typeof uri);
-            console.error('- Length:', uri.length);
-            console.error('- Starts with mongodb:// or mongodb+srv://:', uri.startsWith('mongodb://') || uri.startsWith('mongodb+srv://'));
-            console.error('- Contains spaces:', uri.includes(' '));
-            console.error('- Contains quotes:', uri.includes('"') || uri.includes("'"));
-            // Safe log of start of URI
-            console.error('- First 15 chars:', uri.substring(0, 15) + '...');
-        } else {
-            console.error('MONGODB_URI is undefined');
-        }
     });
 
 const apiRoutes = require('./routes/api');
