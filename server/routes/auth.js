@@ -9,6 +9,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key';
 // Register
 router.post('/register', async (req, res) => {
     try {
+        console.log('Register request received:', req.body);
         const { name, email, password } = req.body;
 
         // Check if user exists

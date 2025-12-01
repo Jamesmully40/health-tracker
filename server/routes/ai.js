@@ -3,11 +3,11 @@ const router = express.Router();
 const HealthLog = require('../models/HealthLog');
 
 // Get AI Recommendations
-router.post('/recommendations', async (req, res) => {
+router.get('/recommendations', async (req, res) => {
     try {
         // In a real app, we would use the user ID from the token
-        // For now, we'll accept it in the body or find the latest logs
-        const { userId } = req.body;
+        // For now, we'll accept it in the query or find the latest logs
+        const { userId } = req.query;
 
         if (!userId) {
             return res.status(400).json({ message: 'User ID required' });
