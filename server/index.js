@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
@@ -31,6 +32,17 @@ app.use('/api', apiRoutes);
 app.get('/', (req, res) => {
     res.send('Health Tracker API is running');
 });
+
+// Serve static files in production
+if (process.env.NODE_ENV === 'production') {
+    // Set static folder
+    app.use(express.static(path.join(__dirname, '../client/dist')));
+
+    // Any route not handled by the API will be handled by the React app
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(__dirname, '../client/dist', 'index.html'));
+    });
+}
 
 // Start Server
 app.listen(PORT, () => {
