@@ -65,7 +65,12 @@ if (process.env.NODE_ENV === 'production') {
     });
 }
 
-// Start Server
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+// Export the Express API
+module.exports = app;
+
+// Start Server only if not running in Vercel (Vercel handles the server start)
+if (require.main === module) {
+    app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
+    });
+}
